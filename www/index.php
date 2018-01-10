@@ -9,4 +9,4 @@ include_once '../library/mainFunctions.php';         //Основные функ
     //Определяем, с какой функцией будем работать
     $actionName = isset($_GET['action']) ? ucfirst($_GET['action']) : 'index';
 
-   loadPage ($controllerName, $actionName);
+   loadPage ($smarty, $controllerName, $actionName);
