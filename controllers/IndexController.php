@@ -2,6 +2,10 @@
 /**
  * Created 10.01.2018 12:01 by E. Hilevsky
  */
+//Подключаем модели
+include_once '../models/CategoriesModel.php';
+
+
 
 /**
  *
@@ -22,7 +26,11 @@ function testAction(){
  */
 
 function indexAction($smarty){
+
+    $rsCategories = getAllMainCatsWithChildren();
+
     $smarty->assign('pageTitle', 'Главная страница сайта');
+    $smarty->assign('rsCategories', $rsCategories);
 
     loadTemplate($smarty, "header");
     loadTemplate($smarty, "index");
