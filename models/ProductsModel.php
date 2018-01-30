@@ -51,3 +51,21 @@ function getProductsByCat($itemId){
 
     return createSmartyRsArray($rs);
 }
+
+/**
+ * Получаем информацию о товаре по его id
+ * (для страницы товара)
+ *
+ * @param integer $itemId   -- id товара
+ * @return array            -- массив данных товара
+ */
+function getProductById($itemId){
+    $itemId = (int)($itemId);
+    $sql =  "SELECT id, category_id, name, description, price, image, status
+            FROM products 
+            WHERE id = '{$itemId}'    ";
+
+    global $db;
+    $rs = mysqli_query($db, $sql);
+    return mysqli_fetch_assoc($rs);
+}
