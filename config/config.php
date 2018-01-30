@@ -23,7 +23,7 @@ define('TemplatePrefix', "../views/{$template}/");
 define('TemplatePostfix', '.tpl');
 
 // пути к файлам шаблонов в веб-пространстве (папка www)
-define('TemplateWebPath', "../www/templates/{$template}/");
+define('TemplateWebPath', "/templates/{$template}/");
 
 // Инициализация шаблонизатора Smarty
 //put full path to Smarty.class.php

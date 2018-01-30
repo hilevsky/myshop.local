@@ -56,3 +56,20 @@ function getAllMainCatsWithChildren(){
     }
     return $smartyRs;
 }
+
+/**
+ * Получаем из базы данные для категории по id
+ *
+ * @param integer $catId  -- id категории
+ * @return array    -- массив, содержащий строку категории
+ */
+function getCatById($catId){
+    $catId = (int)($catId);
+    $sql = "SELECT id, parent_id, name
+            FROM  categories
+            WHERE id = '{$catId}'    ";
+
+    global $db;
+    $rs = mysqli_query ($db, $sql);
+    return mysqli_fetch_assoc($rs);
+}
