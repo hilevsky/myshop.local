@@ -48,3 +48,16 @@ function removeFromCart(itemId){
     });
 
 }
+
+/**
+ *  Подсчет стоимости товара в корзине
+ *
+ *  @param integer itemId   -- id товара
+ */
+function conversionPrice(itemId){
+    var newCnt = $('#itemCnt_' +itemId).val();
+    var itemPrice = $('#itemPrice_' +itemId).attr('value');
+    var itemRealPrice = newCnt * itemPrice;
+
+    $('#itemRealPrice_' +itemId).html(itemRealPrice);
+}

@@ -69,3 +69,22 @@ function getProductById($itemId){
     $rs = mysqli_query($db, $sql);
     return mysqli_fetch_assoc($rs);
 }
+
+/**
+ * Получаем список товаров и их свойств из БД по списку их id
+ * (для страницы корзины)
+ *
+ * @param array $itemIds   -- массив с id товаров
+ * @return array            -- массив данных товаров
+ */
+function getProductsFromArray($itemIds){
+
+    $strIds = implode($itemIds, ', '); /** Превращаем массив в строку через запятую с пробелом */
+    $sql =  "SELECT id, category_id, name, description, price, image, status
+            FROM products 
+            WHERE id in ({$strIds})    ";
+
+    global $db;
+    $rs = mysqli_query($db, $sql);
+    return createSmartyRsArray($rs);
+}
