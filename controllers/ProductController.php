@@ -30,6 +30,14 @@ function indexAction($smarty){
     // получаем все категории для формирования левого меню на странице конкретного товара
     $rsCategories = getAllMainCatsWithChildren();
 
+    //Проверяем, есть ли товар в корзине.
+    // itemInCart используем для скрытия ссылок "Добавить в корзину", "Удалить из корзины"
+    //Если itemInCart=1, скрываем "Добавить в корзину"
+    $smarty->assign('itemInCart', 0);
+    if(in_array($itemId, $_SESSION['cart'])){
+        $smarty->assign('itemInCart', 1);
+    }
+
     $smarty->assign('pageTitle', '');
     $smarty->assign('rsCategories', $rsCategories);
     $smarty->assign('rsProduct', $rsProduct);
