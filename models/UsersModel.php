@@ -101,3 +101,35 @@ function checkUserEmail($email){
 
     return $rs;
 }
+
+/**
+ * Авторизация пользователя
+ *
+ * @param string $email адрес электронной почты (он же логин)
+ * @param string $pwd пароль
+ * @return array массив данных пользователя
+ */
+function loginUser($email, $pwd){
+
+    global $db;
+
+    $email = htmlspecialchars(mysqli_real_escape_string($db, $email));
+    $pwd = md5($pwd);
+
+    $sql = "SELECT id, email, pwd, name, phone, address 
+            FROM users
+            WHERE email = '{$email}' and pwd = '{$pwd}'
+            LIMIT 1";
+//d($sql);
+    $rs = mysqli_query($db, $sql);
+
+    $rs = createSmartyRsArray($rs);
+
+    if(isset($rs[0])){
+        $rs['success'] = 1;
+    } else {
+        $rs['success'] = 0;
+    }
+
+    return $rs;
+}

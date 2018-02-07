@@ -94,6 +94,42 @@ function registerNewUser(){
 
                 //скрываем блок регистрации в левом столбце
                 $('#registerBox').hide();
+
+                $('#userLink').attr('href', '/user/');
+                $('#userLink').html(data['userName']);
+                $('#userBox').show();
+            } else {
+                alert(data['message']);
+            }
+        }
+    });
+
+}
+
+/**
+ *  Авторизация пользователя
+ */
+function login(){
+    var email = $('#loginEmail').val();
+    var pwd = $('#loginPwd').val();
+
+    var postData = "email="+ email +"&pwd=" +pwd;
+
+    $.ajax({
+        type: 'POST',
+        // async: false,
+        url: "/user/login/",
+        data: postData,
+        dataType: 'json',
+        success: function(data){
+            if(data['success']){
+                //скрываем блоки регистрации и авторизации в левом столбце
+                $('#registerBox').hide();
+                $('#loginBox').hide();
+                //выводим меню пользователя
+                $('#userLink').attr('href', '/user/');
+                $('#userLink').html(data['displayName']);
+                $('#userBox').show();
             } else {
                 alert(data['message']);
             }
