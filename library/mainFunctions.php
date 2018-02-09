@@ -58,7 +58,7 @@ function d($value = null, $die = 1){
 
 function createSmartyRsArray ($rs){
     if (! $rs) return false;
-    $smartyRs = array();
+    $smartyRs = [];
     while ($row = mysqli_fetch_assoc($rs)){
         $smartyRs[] = $row;
     }

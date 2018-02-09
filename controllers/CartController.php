@@ -24,7 +24,7 @@ function addtocartAction(){
     if(!$itemId)
         return false;
 
-    $resData = array();
+    $resData = [];
 
     if(isset($_SESSION['cart']) && array_search($itemId, $_SESSION['cart']) === false){
         $_SESSION['cart'][] = $itemId;
@@ -49,7 +49,7 @@ function removefromcartAction(){
     if(!$itemId)
         exit();
 
-    $resData = array();
+    $resData = [];
     $key = array_search($itemId, $_SESSION['cart']);
     if($key !== false){
         unset($_SESSION['cart'][$key]);
@@ -81,4 +81,75 @@ function indexAction($smarty){
     loadTemplate($smarty, 'header');
     loadTemplate($smarty, 'cart');
     loadTemplate($smarty, 'footer');
+}
+
+/**
+ * Формирование страницы заказа
+ *
+ */
+function orderAction($smarty){
+
+    //получаем массив с id товаров в корзине
+    $itemsIds = isset($_SESSION['cart']) ? $_SESSION['cart'] : null;
+
+    //если в корзине пусто, то переадресация в корзину
+    if(!$itemsIds){
+        redirect('/cart/');
+        return;
+    }
+
+    //получаем из массива POST количество каждого товара
+    $itemsCnt = [];
+    foreach($itemsIds as $item){
+        $postVar = 'itemCnt_'.$item;        //ключ для массива POST
+        //создаем элемент массива для товара из корзины, ключ - ID товара, значение - количество товара
+        $itemsCnt[$item] = isset($_POST[$postVar]) ? $_POST[$postVar] : null;
+    }
+    //получаем список товаров и их свойств из БД по списку их id
+    $rsProducts = getProductsFromArray($itemsIds);
+
+    //добавляем каждому товару доп поля:
+    //"realPrice" - кол-во товаров * цену товара
+    //"cnt" - кол-во заказанного товара
+    //&$item - ссылка на кол-во товара, чтобы при ее изменении менялся и элемент в массиве $rsProducts
+    $i = 0;
+
+    foreach($rsProducts as &$item){
+        $item['cnt'] = isset($itemsCnt[$item['id']]) ? $itemsCnt[$item['id']] : 0;
+
+        if($item['cnt']){
+            $item['realPrice'] = $item['cnt'] * $item['price'];
+        } else {
+            //если товар есть, а кол-во товара =0, то удаляем товар из массива
+            unset($rsProducts[$i]);
+        }
+        $i++;
+    }
+
+    if(!$rsProducts){
+        echo "Корзина пуста";
+        return;
+    }
+
+    //полученный массив покупаемых товаров помещаем в сессионную переменную
+    $_SESSION['saleCart'] = $rsProducts;
+
+    $rsCategories = getAllMainCatsWithChildren();
+
+    //формируем страницу заказа
+
+    //hideLoginBox - флаг, чтобы прятать блоки логина и регистрации в левом меню
+    if(!isset($_SESSION['user'])) {
+        $smarty->assign('hideLoginBox', 1);
+        }
+
+
+    $smarty->assign('pageTitle', 'Заказ');
+    $smarty->assign('rsCategories', $rsCategories);
+    $smarty->assign('rsProducts', $rsProducts);
+
+    loadTemplate($smarty, 'header');
+    loadTemplate($smarty, 'order');
+    loadTemplate($smarty, 'footer');
+
 }

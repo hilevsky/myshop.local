@@ -3,7 +3,7 @@ session_start();    //стартуем сессию
 
 // если в сессии нет массива корзины, то создаем его (первое посещение)
 if(!isset($_SESSION['cart'])){
-    $_SESSION['cart'] = array();
+    $_SESSION['cart'] = [];
 }
 
 include_once '../config/config.php';                // Инициализация настроек

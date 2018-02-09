@@ -135,7 +135,7 @@ function updateAction(){
     }
 
     // инициализация переменных
-    $resData = array();
+    $resData = [];
     $phone = isset($_REQUEST['phone']) ? $_REQUEST['phone'] : null;
     $address = isset($_REQUEST['address']) ? $_REQUEST['address'] : null;
     $name = isset($_REQUEST['name']) ? $_REQUEST['name'] : null;

@@ -60,7 +60,7 @@ function registerNewUser($email, $pwdMD5, $name, $phone, $address){
  */
 function checkRegisterParams($email, $pwd1, $pwd2){
 
-    $res = array();
+    $res = [];
 
 
     if(! $email){
