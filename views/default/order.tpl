@@ -75,10 +75,6 @@
                 </tr>
             </table>
         </div>
-        <div class="menuCaption">Авторизация</div>
-        <input type="text" id="loginEmail" name="loginEmail" value=""><br>
-        <input type="password" id="loginPwd" name="loginPwd" value=""><br>
-        <input type="button" onclick="login();" value="Войти"><br>
 
         <div id="registerBox">или<br>
             <div class="menuCaption">Регистрация нового пользователя</div>
