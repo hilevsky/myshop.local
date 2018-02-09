@@ -130,6 +130,14 @@ function login(){
                 $('#userLink').attr('href', '/user/');
                 $('#userLink').html(data['displayName']);
                 $('#userBox').show();
+                //заполняем поля на странице заказа(имя тел адрес)
+                $('#name').val(data['name']);
+                $('#phone').val(data['phjne']);
+                $('#address').val(data['address']);
+
+
+                //отображаем кнопку Оформить заказ на странице оформления товара (если авторизован)
+                $('#btnSaveOrder').show();
             } else {
                 alert(data['message']);
             }
@@ -183,4 +191,28 @@ function updateUserData(){
             }
         }
     });
+}
+
+/**
+ *  Сохранение заказа
+ */
+function saveOrder(){
+    var postData = getData('form');
+
+    $.ajax({
+        type: 'POST',
+        // async: false,
+        url: "/cart/saveorder/",
+        data: postData,
+        dataType: 'json',
+        success: function(data){
+            if(data['success']) {
+                alert(data['message']);
+                document.location = '/';
+            } else {
+                alert(data['message']);
+            }
+        }
+    });
+
 }

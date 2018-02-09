@@ -1,5 +1,5 @@
 {* страница заказа *}
-
+<h2>Данные заказа</h2>
 <form id="frmOrder" action="/cart/saveorder/" method="POST">
     <table>
         <tr>
