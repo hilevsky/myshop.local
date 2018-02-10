@@ -33,7 +33,7 @@ function registerNewUser($email, $pwdMD5, $name, $phone, $address){
         $rs['success'] = 0;
     } else {
 
-        $sql = "SELECT email, pwd, name, phone, address FROM users
+        $sql = "SELECT id, email, pwd, name, phone, address FROM users
                 WHERE email='{$email}' and pwd='{$pwdMD5}'
                 LIMIT 1";
 
@@ -178,5 +178,16 @@ function updateUserData($name, $phone, $address, $pwd1, $pwd2, $curPwd){
     $rs = mysqli_query($db, $sql);
 
     return $rs;
+}
 
+/**
+ * Получить данные заказа текущего пользователя
+ *
+ * @return array массив заказов с привязкой к продуктам
+ */
+function getCurUserOrders(){
+    $userId = isset($_SESSION['user']['id']) ? $_SESSION['user']['id'] : 0;
+    $rs = getOrdersWithProductsByUser($userId);
+
+    return $rs;
 }

@@ -98,6 +98,11 @@ function registerNewUser(){
                 $('#userLink').attr('href', '/user/');
                 $('#userLink').html(data['userName']);
                 $('#userBox').show();
+                //на странице оформления товара (если регистрация прошла там)
+                //скрываем форму регистрации, показываем кнопку оформить товар
+                $('#loginBox').hide();
+                $('#btnSaveOrder').show();
+
             } else {
                 alert(data['message']);
             }
@@ -132,7 +137,7 @@ function login(){
                 $('#userBox').show();
                 //заполняем поля на странице заказа(имя тел адрес)
                 $('#name').val(data['name']);
-                $('#phone').val(data['phjne']);
+                $('#phone').val(data['phone']);
                 $('#address').val(data['address']);
 
 
@@ -215,4 +220,16 @@ function saveOrder(){
         }
     });
 
+}
+
+/**
+ *  Показывать или прятать данные о заказе
+ */
+function showProducts(id){
+    var objName = "#purchasesForOrderId_" + id;
+    if( $(objName).css('display') !='table-row'){
+        $(objName).show();
+    } else {
+        $($objName).hide();
+    }
 }
