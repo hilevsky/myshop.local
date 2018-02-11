@@ -73,3 +73,42 @@ function getCatById($catId){
     $rs = mysqli_query ($db, $sql);
     return mysqli_fetch_assoc($rs);
 }
+
+/**
+ * Получить все главные категории (которые не дочерние)(для страницы админки)
+ *
+ * @return array    -- массив категорий
+ */
+function getAllMainCategories(){
+
+    global $db;
+
+    $sql = "SELECT *
+            FROM categories
+            WHERE parent_id=0";
+
+    $rs = mysqli_query($db, $sql);
+
+    return createSmartyRsArray($rs);
+}
+
+/**
+ * Добавление новой категории (страница админки)
+ *
+ * @param string $catName   -- название категории
+ * @param integer $catParentId  -- id родительнской категории
+ * @return integer      -- id новой категории
+ */
+function insertCat($catName, $catParentId = 0){
+
+    global $db;
+    $sql = "INSERT INTO categories (parent_id, name)
+            VALUES ('{$catParentId}', '{$catName}')";
+
+    mysqli_query($db, $sql);
+
+    //получаем id созданной записи
+    $id = mysqli_insert_id($db);
+
+    return $id;
+}

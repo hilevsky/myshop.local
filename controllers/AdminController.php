@@ -13,9 +13,41 @@ $smarty->assign('TemplateWebPath', TemplateAdminWebPath);
 
 function indexAction($smarty){
 
+    $rsCategories = getAllMainCategories();
+
+    $smarty->assign('rsCategories', $rsCategories);
     $smarty->assign('pageTitle', 'Управление сайтом');
 
     loadTemplate($smarty, 'adminHeader');
     loadTemplate($smarty, 'admin');
     loadTemplate($smarty, 'adminFooter');
+}
+
+/**
+ * Добавление новой категории товара
+ *
+ */
+function addnewcatAction(){
+
+    $catName = isset($_POST['newCategoryName']) ? $_POST['newCategoryName'] : null;
+    $catParentId = $_POST['generalCatId'];
+
+    if(!$catName){
+        $resData['message'] = "Введите название категории";
+        $resData['success'] = 0;
+        echo json_encode($resData);
+        exit;
+    }
+
+    $res = insertCat($catName, $catParentId);
+
+    if($res){
+        $resData['message'] = "Категория добавлена";
+        $resData['success'] = 1;
+    } else {
+        $resData['message'] = "Ошибка добавления категории";
+        $resData['success'] = 0;
+    }
+    echo json_encode($resData);
+    return;
 }
