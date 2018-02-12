@@ -1,5 +1,5 @@
 {* футер *}
-</div> {*/ centerColumn*}
+ {*/ centerColumn*}
 <div id="footer">
     Footer
 </div>

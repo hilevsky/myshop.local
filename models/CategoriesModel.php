@@ -112,3 +112,53 @@ function insertCat($catName, $catParentId = 0){
 
     return $id;
 }
+
+/**
+ * Получение всех категорий товара
+ *
+ * @return array -- массив категорий
+ */
+function getAllCategories(){
+
+    global $db;
+
+    $sql = "SELECT * 
+            FROM categories
+            ORDER BY parent_id ASC";
+
+    $rs = mysqli_query($db, $sql);
+
+    return createSmartyRsArray($rs);
+}
+
+/**
+ * Обновление категорий (страница управления категориями /admin/category)
+ *
+ * @param integer $itemId       -- id категории
+ * @param integer $parentId     -- id главной категории
+ *@param string $newName        -- новое имя категории
+ *@return type
+ */
+function updateCategoryData($itemId, $parentId = -1, $newName = ''){
+
+    $set = [];
+
+    if($newName){
+        $set[] = "name = '{$newName}'";
+    }
+
+    if($parentId > -1){
+        $set[] = "parent_id = {$parentId}";
+    }
+
+    $setStr = implode($set, ", ");
+
+    global $db;
+    $sql = "UPDATE categories
+            SET {$setStr}
+            WHERE id = '{$itemId}'";
+
+    $rs = mysqli_query($db, $sql);
+
+    return $rs;
+}

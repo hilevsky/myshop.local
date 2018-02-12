@@ -51,3 +51,44 @@ function addnewcatAction(){
     echo json_encode($resData);
     return;
 }
+
+/**
+ * Страница управления категориями товара
+ *
+ * @param type $smarty
+ *
+ */
+function categoryAction($smarty){
+
+    $rsCategories = getAllCategories();
+    $rsMainCategories = getAllMainCategories();
+
+    $smarty->assign('rsCategories', $rsCategories);
+    $smarty->assign('rsMainCategories', $rsMainCategories);
+    $smarty->assign('pageTitle', 'Управление сайтом');
+
+    loadTemplate($smarty, 'adminHeader');
+    loadTemplate($smarty, 'adminCategory');
+    loadTemplate($smarty, 'adminFooter');
+}
+/**
+ * Редактирование категорий
+ */
+function updatecategoryAction(){
+    $itemId = $_POST['itemId'];
+    $parentId = $_POST['parentId'];
+    $newName = $_POST['newName'];
+
+    $res = updateCategoryData($itemId, $parentId, $newName);
+
+    if($res){
+        $resData['success'] = 1;
+        $resData['message'] = "Категория обновлена";
+    } else {
+        $resData['success'] = 0;
+        $resData['message'] = "Ошибка изменения данных категории";
+    }
+
+    echo json_encode($resData);
+    return;
+}
