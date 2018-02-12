@@ -20,6 +20,7 @@ function getLastProducts ($limit = null){
 
     $sql = "SELECT id, category_id, name, description, price, image, status
             FROM products 
+            WHERE status = 1
             ORDER BY id DESC";
 
     if ($limit){
@@ -44,7 +45,7 @@ function getProductsByCat($itemId){
     $itemId = (int)($itemId);
     $sql = "SELECT id, category_id, name, description, price, image, status
             FROM products 
-            WHERE category_id = '{$itemId}'    ";
+            WHERE category_id = '{$itemId}' AND status = 1   ";
 
     global $db;
     $rs = mysqli_query($db, $sql);
@@ -63,7 +64,7 @@ function getProductById($itemId){
     $itemId = (int)($itemId);
     $sql =  "SELECT id, category_id, name, description, price, image, status
             FROM products 
-            WHERE id = '{$itemId}'    ";
+            WHERE id = '{$itemId}'  AND status = 1  ";
 
     global $db;
     $rs = mysqli_query($db, $sql);
@@ -87,4 +88,101 @@ function getProductsFromArray($itemIds){
     global $db;
     $rs = mysqli_query($db, $sql);
     return createSmartyRsArray($rs);
+}
+
+/**
+ * Получение всех товаров (для страницы редактирования товаров /admin/products/)
+ *
+ * @return array -- массив категорий
+ */
+function getProducts(){
+
+    global $db;
+
+    $sql = "SELECT * 
+            FROM products
+            ORDER BY category_id";
+
+    $rs = mysqli_query($db, $sql);
+
+    return createSmartyRsArray($rs);
+}
+
+/**
+ * Добавление нового товара (для страницы редактирования товаров /admin/products/)
+ *
+ * @param string $itemName      -- название товара
+ * @param integer $itemPrice    -- цена
+ * @param string $itemDesc      -- описание
+ * @param integer $itemCat      -- цена
+ * @return integer      -- результат выполнения запроса к БД
+ */
+function insertProduct($itemName, $itemPrice, $itemDesc, $itemCat){
+
+    global $db;
+
+    $sql = "INSERT INTO products
+            SET 
+            name = '{$itemName}',
+            price = '{$itemPrice}',
+            description = '{$itemDesc}',
+            category_id = '{$itemCat}'";
+//d($sql);
+    $rs = mysqli_query($db, $sql);
+
+    return $rs;
+}
+
+/**
+ *  Редактирование товара (нв странице /admin/products/)
+ */
+function updateProduct($itemId, $itemName, $itemPrice, $itemStatus, $itemDesc, $itemCat, $newFileName = null){
+
+    $set=[];
+
+    if($itemName){
+        $set[] = "name = '{$itemName}'";
+    }
+
+    if($itemPrice > 0){
+        $set[] = "price = '{$itemPrice}'";
+    }
+
+    if($itemStatus !== null){
+        $set[] = "status = '{$itemStatus}'";
+    }
+
+    if($itemDesc){
+        $set[] = "description = '{$itemDesc}'";
+    }
+
+    if($itemCat){
+        $set[] = "category_id = '{$itemCat}'";
+    }
+
+    if($newFileName){
+        $set[] = "image = '{$newFileName}'";
+    }
+
+    $setStr = implode($set,", ");
+
+    global $db;
+
+    $sql = "UPDATE products
+            SET {$setStr}
+            WHERE id = '{$itemId}'";
+
+    $rs = mysqli_query($db, $sql);
+
+    return $rs;
+}
+/**
+ * Добавление названия файла с картинкой в БД
+ */
+function updateProductImage($itemId, $newFileName){
+
+    $rs = updateProduct($itemId, null, null, null,
+        null, null, $newFileName);
+
+    return $rs;
 }
