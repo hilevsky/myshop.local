@@ -106,3 +106,57 @@ function getOrders(){
     }
     return $smartyRs;
 }
+
+/**
+ * Получить товары заказа
+ *
+ * @param integer $orderId  -- id заказа
+ * @return array            -- массив данных заказа
+ */
+function getProductsForOrder($orderId){
+
+    global $db;
+
+    $sql = "SELECT * 
+            FROM purchase AS pe
+            LEFT JOIN products AS ps
+            ON pe.product_id = ps.id
+            WHERE order_id = '{$orderId}'";
+
+    $rs = mysqli_query($db, $sql);
+    return createSmartyRsArray($rs);        //Преобразуем результат запроса в массив
+}
+
+/**
+ * Обновление статуса заказа в БД, закрыт/нет,
+ * страница /admin/orders/
+ */
+function updateOrderStatus($itemId, $status){
+    $status = (int)($status);
+
+    global $db;
+
+    $sql = "UPDATE orders
+            SET status = '{$status}'
+            WHERE id = '{$itemId}'";
+
+    $rs = mysqli_query($db, $sql);
+
+    return $rs;
+}
+
+/**
+ * Сохранение в БД даты оплаты заказа
+ * страница /admin/orders/, вручную по кнопке "сохранить"
+ */
+function updateOrderDatePayment($itemId, $datePayment){
+
+    global $db;
+    $sql = "UPDATE orders
+            SET date_payment = '{$datePayment}'
+            WHERE id = '{$itemId}'";
+
+    $rs = mysqli_query($db, $sql);
+
+    return $rs;
+}

@@ -212,3 +212,41 @@ function ordersAction($smarty){
     loadTemplate($smarty, 'adminOrders');
     loadTemplate($smarty, 'adminFooter');
 }
+
+/**
+ * Обновление статуса заказа в БД (AJAX-запрос со страницы /admin/orders/)
+ */
+function setorderstatusAction(){
+    $itemId = $_POST['itemId'];
+    $status = $_POST['status'];
+
+    $res = updateOrderStatus($itemId, $status);
+
+    if($res){
+        $resData['success'] = 1;
+    } else {
+        $resData['success'] = 0;
+        $resData['message'] = "Ошибка установки статуса";
+    }
+    echo json_encode($resData);
+    return;
+}
+
+/**
+ * Сохранение в БД даты оплаты заказа (AJAX-запрос со страницы /admin/orders/)
+ */
+function setorderdatepaymentAction(){
+    $itemId = $_POST['itemId'];
+    $datePayment = $_POST['datePayment'];
+
+    $res = updateOrderDatePayment($itemId, $datePayment);
+
+    if($res){
+        $resData['success'] = 1;
+    } else {
+        $resData['success'] = 0;
+        $resData['message'] = "Ошибка сохранения";
+    }
+    echo json_encode($resData);
+    return;
+}

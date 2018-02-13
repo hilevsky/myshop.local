@@ -74,7 +74,7 @@
                             </tr>
                             {foreach $item['children'] as $itemChild name=product}
                                 <tr>
-                                    <td>{$smarty.foreach.products.iteration}</td>
+                                    <td>{$smarty.foreach.product.iteration}</td>
                                     <td>{$itemChild['product_id']}</td>
                                     <td><a href="/product/{$itemChild['product_id']}">{$itemChild['name']}</a></td>
                                     <td>{$itemChild['price']}</td>

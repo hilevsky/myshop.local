@@ -49,3 +49,6 @@ body{
 #registerBoxHidden{
     display: none;
 }
+td{
+    text-align: center;
+}
